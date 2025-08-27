@@ -1,0 +1,150 @@
+/* Estilos minimalistas para transmitir confiança e clareza */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #fbfbfb;
+  /* background-image: url('img/5.png'); */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #1a1a1a;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.card {
+  background: #ffffffe3;
+
+  border-radius: 12px;
+  padding: 3rem 4rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.205);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 50%;
+}
+
+.text{
+  margin-right: 2rem;
+  
+}
+
+
+
+.text p{
+  width: 100%;
+  text-align: center;
+  padding: 0 2rem;
+
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.me {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+}
+
+.me img{
+  width: 100px;
+  border-radius: 100%;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.5rem;
+  font-weight: 300;
+  color: #000;
+  margin: -0.1rem 0 1.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  font-family: "Poppins", sans-serif;
+  opacity: 0.8;
+}
+
+.portfolio-btn {
+  background: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+}
+
+.portfolio-btn:hover {
+  background: #374151;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(26, 26, 26, 0.15);
+}
+
+.portfolio-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .card {
+    padding: 2rem 2.5rem;
+    margin: 1rem;
+    max-width: 100%;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+    margin: 0.8rem 0 2rem;
+  }
+  
+  .portfolio-btn {
+    padding: 0.9rem 1.8rem;
+    font-size: 0.9rem;
+  }
+
+
+}
+
+.separate{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: -7rem;
+}
+
