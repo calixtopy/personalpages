@@ -123,9 +123,6 @@ h1 {
 
 /* Responsividade */
 @media (max-width: 768px) {
-  body{
-    background-color: aqua;
-  }
   .container{
     min-height: 100vh;
     height: 100vh;
