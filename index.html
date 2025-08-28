@@ -14,6 +14,155 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   </head>
   <body>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        (function() {
+          let isLocked = false;
+          let pendingTargetIndex = null;
+          let wheelAccumulation = 0;
+          const ACCUM_THRESHOLD = 60; // px of wheel delta needed to trigger a step
+          const MAX_DELTA_PER_EVENT = 120; // clamp extreme deltas per event
+          const FALLBACK_UNLOCK_MS = 1000; // safety unlock
+
+          const sections = Array.from(document.querySelectorAll('.container'));
+          if (!sections.length) return;
+          let currentIndex = 0;
+          let touchStartY = 0;
+          let touchStartTime = 0;
+          let touchMoved = false;
+
+          const scrollToIndex = (idx) => {
+            const clamped = Math.max(0, Math.min(idx, sections.length - 1));
+            currentIndex = clamped;
+            sections[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
+          };
+
+          const getNearestIndex = () => {
+            let nearest = 0;
+            let minDist = Infinity;
+            const y = window.scrollY;
+            sections.forEach((el, i) => {
+              const top = el.offsetTop;
+              const dist = Math.abs(top - y);
+              if (dist < minDist) { minDist = dist; nearest = i; }
+            });
+            return nearest;
+          };
+
+          const isSectionSnapped = (idx) => {
+            const el = sections[idx];
+            if (!el) return false;
+            const rect = el.getBoundingClientRect();
+            // Consider snapped when top is close to viewport top
+            return Math.abs(rect.top) < 6;
+          };
+
+          // Touch event handlers for mobile
+          const handleTouchStart = (e) => {
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+            touchMoved = false;
+          };
+
+          const handleTouchMove = (e) => {
+            if (isLocked) return;
+            const currentY = e.touches[0].clientY;
+            const deltaY = touchStartY - currentY;
+            const deltaTime = Date.now() - touchStartTime;
+            
+            // Only trigger if moved significantly and quickly
+            if (Math.abs(deltaY) > 50 && deltaTime < 300) {
+              touchMoved = true;
+              const direction = deltaY > 0 ? 1 : -1;
+              const base = getNearestIndex();
+              const target = Math.max(0, Math.min(base + direction, sections.length - 1));
+              if (target !== base) {
+                isLocked = true;
+                pendingTargetIndex = target;
+                scrollToIndex(target);
+                setTimeout(() => { if (isLocked) { isLocked = false; pendingTargetIndex = null; } }, FALLBACK_UNLOCK_MS);
+              }
+            }
+          };
+
+          const handleTouchEnd = (e) => {
+            // Reset touch state
+            touchStartY = 0;
+            touchStartTime = 0;
+            touchMoved = false;
+          };
+
+          // Observe snapping completion to release lock
+          const observer = new IntersectionObserver((entries) => {
+            if (pendingTargetIndex == null) return;
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && sections[pendingTargetIndex] === entry.target) {
+                if (isSectionSnapped(pendingTargetIndex)) {
+                  isLocked = false;
+                  pendingTargetIndex = null;
+                }
+              }
+            });
+          }, { threshold: [0, 0.5, 1] });
+          sections.forEach(s => observer.observe(s));
+
+          // Add touch event listeners
+          document.addEventListener('touchstart', handleTouchStart, { passive: false });
+          document.addEventListener('touchmove', handleTouchMove, { passive: false });
+          document.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+          window.addEventListener('wheel', (e) => {
+            // Always prevent default to avoid native momentum interfering
+            e.preventDefault();
+            if (isLocked) return;
+
+            // Clamp extreme deltas and accumulate
+            const clampedDelta = Math.max(-MAX_DELTA_PER_EVENT, Math.min(e.deltaY, MAX_DELTA_PER_EVENT));
+            wheelAccumulation += clampedDelta;
+
+            if (Math.abs(wheelAccumulation) >= ACCUM_THRESHOLD) {
+              const direction = wheelAccumulation > 0 ? 1 : -1;
+              wheelAccumulation = 0; // consume one step only
+              const base = getNearestIndex();
+              const target = Math.max(0, Math.min(base + direction, sections.length - 1));
+              if (target !== base) {
+                isLocked = true;
+                pendingTargetIndex = target;
+                scrollToIndex(target);
+                // Fallback unlock in case observer misses
+                setTimeout(() => { if (isLocked) { isLocked = false; pendingTargetIndex = null; } }, FALLBACK_UNLOCK_MS);
+              }
+            }
+          }, { passive: false });
+
+          // Also support keyboard arrows/PageUp/PageDown
+          window.addEventListener('keydown', (e) => {
+            const keysDown = ['ArrowDown', 'PageDown', ' '];
+            const keysUp = ['ArrowUp', 'PageUp'];
+            if (isLocked) return;
+            if (keysDown.includes(e.key)) {
+              e.preventDefault();
+              const base = getNearestIndex();
+              const target = Math.min(base + 1, sections.length - 1);
+              if (target !== base) {
+                isLocked = true; pendingTargetIndex = target;
+                scrollToIndex(target);
+                setTimeout(() => { if (isLocked) { isLocked = false; pendingTargetIndex = null; } }, FALLBACK_UNLOCK_MS);
+              }
+            } else if (keysUp.includes(e.key)) {
+              e.preventDefault();
+              const base = getNearestIndex();
+              const target = Math.max(base - 1, 0);
+              if (target !== base) {
+                isLocked = true; pendingTargetIndex = target;
+                scrollToIndex(target);
+                setTimeout(() => { if (isLocked) { isLocked = false; pendingTargetIndex = null; } }, FALLBACK_UNLOCK_MS);
+              }
+            }
+          });
+        })();
+      });
+    </script>
     <div class="container">
       <div class="card">
         <div class="me">

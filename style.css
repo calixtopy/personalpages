@@ -16,6 +16,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
 }
 
 
@@ -26,6 +28,8 @@ body {
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .card {
