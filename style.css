@@ -123,6 +123,10 @@ h1 {
 
 /* Responsividade */
 @media (max-width: 768px) {
+  .container{
+    min-height: 100vh;
+    height: 100vh;
+  }
   .card {
     padding: 2rem 2.5rem;
     margin: 1rem;
