@@ -63,6 +63,7 @@
             gap: 1.5rem;
             margin-top: 2rem;
             padding: 0 1rem;
+            grid-auto-rows: 10px; /* Altura base para o grid */
         }
 
         .portfolio-item {
@@ -73,6 +74,24 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             break-inside: avoid;
+            position: relative;
+        }
+
+        /* Classes para diferentes tamanhos de altura */
+        .portfolio-item.small {
+            grid-row-end: span 15; /* 150px */
+        }
+
+        .portfolio-item.medium {
+            grid-row-end: span 20; /* 200px */
+        }
+
+        .portfolio-item.large {
+            grid-row-end: span 25; /* 250px */
+        }
+
+        .portfolio-item.xlarge {
+            grid-row-end: span 30; /* 300px */
         }
 
         .portfolio-item:hover {
@@ -82,7 +101,7 @@
 
         .portfolio-image {
             width: 100%;
-            height: auto;
+            height: 100%;
             object-fit: cover;
             transition: transform 0.3s ease;
             display: block;
@@ -151,6 +170,28 @@
             box-shadow: 0 8px 30px rgba(10, 10, 10, 0.25);
         }
 
+        .reorganize-button {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.15);
+            z-index: 1000;
+        }
+
+        .reorganize-button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 123, 255, 0.25);
+        }
 
 
         @media (max-width: 768px) {
@@ -161,6 +202,24 @@
             .portfolio-grid {
                 grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
                 gap: 1rem;
+                grid-auto-rows: 8px; /* Altura base menor para mobile */
+            }
+
+            /* Ajusta tamanhos para mobile */
+            .portfolio-item.small {
+                grid-row-end: span 12; /* 96px */
+            }
+
+            .portfolio-item.medium {
+                grid-row-end: span 16; /* 128px */
+            }
+
+            .portfolio-item.large {
+                grid-row-end: span 20; /* 160px */
+            }
+
+            .portfolio-item.xlarge {
+                grid-row-end: span 24; /* 192px */
             }
             
             .header h1 {
@@ -176,15 +235,40 @@
                 right: 1rem;
                 padding: 0.75rem 1.25rem;
             }
+
+            .reorganize-button {
+                bottom: 1rem;
+                left: 1rem;
+                padding: 0.75rem 1.25rem;
+            }
         }
 
         @media (max-width: 480px) {
             .portfolio-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 0.75rem;
+                grid-auto-rows: 6px; /* Altura base ainda menor */
+            }
+
+            /* Ajusta tamanhos para telas muito pequenas */
+            .portfolio-item.small {
+                grid-row-end: span 10; /* 60px */
+            }
+
+            .portfolio-item.medium {
+                grid-row-end: span 14; /* 84px */
+            }
+
+            .portfolio-item.large {
+                grid-row-end: span 18; /* 108px */
+            }
+
+            .portfolio-item.xlarge {
+                grid-row-end: span 22; /* 132px */
             }
             
             .portfolio-item {
-                margin-bottom: 1rem;
+                margin-bottom: 0.75rem;
             }
         }
     </style>
@@ -199,11 +283,13 @@
     </div>
 
     <button class="back-button" onclick="window.location.href='index.html'">← Voltar</button>
+    <button class="reorganize-button" onclick="window.portfolioManager.reorganizeCards()">🔄 Reorganizar</button>
 
     <!-- Script externo para gerenciar os cards -->
     <script src="scripts/cards.js"></script>
     
     <script>
+        alert('Oi, fico feliz que se interessou pelos nossos serviços. Passando para avisar que o site ainda está em construção e o portifólio não está concluido. Masi informações nos chame no whatsapp: (16) 99238-6645')
         // Inicializa o portfólio quando a página carregar
         document.addEventListener('DOMContentLoaded', function() {
             // Gera os cards dinamicamente

@@ -29,6 +29,8 @@ body {
 
 
 
+
+
 .container {
   min-height: 100vh;
   display: flex;
@@ -50,6 +52,16 @@ body {
   align-items: center;
   justify-content: center;
   max-width: 50%;
+}
+
+.ct-2{
+  /* background-image: url('img/gif.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; */
+
+  /* precisa ser um deserto de verdade. em loop. */
+  /* nao esquecer da lampada acima da clareza */
 }
 
 .text{
