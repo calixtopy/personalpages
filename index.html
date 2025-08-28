@@ -30,6 +30,9 @@
           let touchStartY = 0;
           let touchStartTime = 0;
           let touchMoved = false;
+          let touchAccumulation = 0;
+          const TOUCH_ACCUM_THRESHOLD = 80; // px de movimento acumulado para trigger
+          const MAX_TOUCH_DELTA_PER_EVENT = 100; // limita delta extremo por evento
 
           const scrollToIndex = (idx) => {
             const clamped = Math.max(0, Math.min(idx, sections.length - 1));
@@ -72,10 +75,15 @@
             const deltaY = touchStartY - currentY;
             const deltaTime = Date.now() - touchStartTime;
             
-            // Only trigger if moved significantly and quickly, and not already triggered
-            if (!touchMoved && Math.abs(deltaY) > 50 && deltaTime < 300) {
+            // Clamp extreme deltas and accumulate (similar to wheel logic)
+            const clampedDelta = Math.max(-MAX_TOUCH_DELTA_PER_EVENT, Math.min(deltaY, MAX_TOUCH_DELTA_PER_EVENT));
+            touchAccumulation += clampedDelta;
+            
+            // Only trigger if accumulated enough movement and not already triggered
+            if (!touchMoved && Math.abs(touchAccumulation) >= TOUCH_ACCUM_THRESHOLD && deltaTime < 500) {
               touchMoved = true;
-              const direction = deltaY > 0 ? 1 : -1;
+              const direction = touchAccumulation > 0 ? 1 : -1;
+              touchAccumulation = 0; // consume one step only
               const base = getNearestIndex();
               const target = Math.max(0, Math.min(base + direction, sections.length - 1));
               if (target !== base) {
@@ -93,6 +101,7 @@
             touchStartY = 0;
             touchStartTime = 0;
             touchMoved = false;
+            touchAccumulation = 0; // reset accumulation for next touch
           };
 
           // Observe snapping completion to release lock
