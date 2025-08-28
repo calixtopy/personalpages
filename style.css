@@ -147,6 +147,26 @@ h1 {
     font-size: 0.9rem;
   }
 
+  
+.text{
+  margin-right: 0rem;
+}
+
+.text p{
+  padding: 0 0rem;
+
+}
+
+.container{
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.card{
+  width: 100%;
+  padding: 1.5rem 2rem;
+
+}
 
 }
 
