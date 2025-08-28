@@ -66,6 +66,7 @@
             touchStartY = e.touches[0].clientY;
             touchStartTime = Date.now();
             touchMoved = false;
+            console.log('Touch started at Y:', touchStartY); // Debug
           };
 
           const handleTouchMove = (e) => {
@@ -87,6 +88,7 @@
               const base = getNearestIndex();
               const target = Math.max(0, Math.min(base + direction, sections.length - 1));
               if (target !== base) {
+                console.log('Touch triggered! Moving from', base, 'to', target); // Debug
                 isLocked = true;
                 pendingTargetIndex = target;
                 scrollToIndex(target);
@@ -109,13 +111,12 @@
             if (pendingTargetIndex == null) return;
             entries.forEach((entry) => {
               if (entry.isIntersecting && sections[pendingTargetIndex] === entry.target) {
-                if (isSectionSnapped(pendingTargetIndex)) {
-                  isLocked = false;
-                  pendingTargetIndex = null;
-                }
+                // Simplified unlock logic - just check if it's intersecting
+                isLocked = false;
+                pendingTargetIndex = null;
               }
             });
-          }, { threshold: [0, 0.5, 1] });
+          }, { threshold: [0.5] });
           sections.forEach(s => observer.observe(s));
 
           // Add touch event listeners
