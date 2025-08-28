@@ -59,19 +59,21 @@
 
           // Touch event handlers for mobile
           const handleTouchStart = (e) => {
+            if (isLocked) return;
             touchStartY = e.touches[0].clientY;
             touchStartTime = Date.now();
             touchMoved = false;
           };
 
           const handleTouchMove = (e) => {
-            if (isLocked) return;
+            if (isLocked || !touchStartY) return;
+            
             const currentY = e.touches[0].clientY;
             const deltaY = touchStartY - currentY;
             const deltaTime = Date.now() - touchStartTime;
             
-            // Only trigger if moved significantly and quickly
-            if (Math.abs(deltaY) > 50 && deltaTime < 300) {
+            // Only trigger if moved significantly and quickly, and not already triggered
+            if (!touchMoved && Math.abs(deltaY) > 50 && deltaTime < 300) {
               touchMoved = true;
               const direction = deltaY > 0 ? 1 : -1;
               const base = getNearestIndex();
@@ -80,6 +82,7 @@
                 isLocked = true;
                 pendingTargetIndex = target;
                 scrollToIndex(target);
+                // Fallback unlock in case observer misses
                 setTimeout(() => { if (isLocked) { isLocked = false; pendingTargetIndex = null; } }, FALLBACK_UNLOCK_MS);
               }
             }
@@ -172,7 +175,7 @@
           <!--ADICIONAR AQUI 3 REDES SOCIAIS, PEQUENININHAS, linkedin, discord, x-->
         </div>
         <div class="text">
-          <p>Se você é um empreendedor de visão e quer textos persuasivos de verdade, continue a leitura. Pois vou entregar os unicos 3 pilares, que podem te levar ao sucesso no digital.</p>
+          <p>Se você é um empreendedor de visão e quer textos persuasivos de verdade, continue a leitura. Pois vou entregar os unicos 3 pilares, que podem te levar ao sucesso no persuasão.</p>
           <!-- procurar uma fonte com um tom mais publicitário. ta mt secão-->
         </div>
         
@@ -226,7 +229,7 @@
         <p class="subtitle"> "Foi um prazer ter você aqui" <br> - Carlos Calixto, 2025.</p>
         <p class="sub-text"> Poderiamos ter falado de várias outras coisas, story telling, gatilhos mentais, funils de vendas. Mas assim como toda arvore que não tem raiz, um dia cai, assim imagino que nossas tecnicas sem os princípios, não vão florecer no maximo do seu potencial.</p>
 
-        <p class="sub-text"> <br> Agora não se esqueça de conferir o nosso portifolio, e exponencializar as suas vendas com nossos serviços. Até a próxima empreendedor, sucesso! 🚀</p>
+        <p class="sub-text"> <br> Agora não se esqueça de conferir o nosso portifolio, e explodir as suas vendas com nossos serviços. Até a próxima empreendedor, sucesso! 🚀</p>
       </div>
     </div>
     <br>
